@@ -12,17 +12,3 @@ for i in range(2, round(math.sqrt(nums[len(nums) - 1])) + 1):
         if j - firstV < 0 or nums[j - firstV] == 0: continue
         else: nums[j - firstV] = 0
 print(len(nums) - nums.count(0))
-
-
-
-
-
-
-
-'''
-for i in range(2, round(math.sqrt(nums[len(nums) - 1])) + 1):
-    for j in range(len(nums)):
-        if result[j] == True:
-            if nums[j] % (i ** 2) == 0: result[j] = False
-print(len(result))
-'''
