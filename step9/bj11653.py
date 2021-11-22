@@ -28,28 +28,3 @@ if len(result) == 0: print(n)
 else:
     for r in result:
         print(r)
-
-
-
-
-'''
-primeN = [True] * (n + 1)
-
-for i in range(2, int(n ** 0.5) + 1):
-    if primeN[i] == True:
-        for j in range(i * 2, n + 1, i):
-            primeN[j] = False
-
-primeNumber = [i for i in range(2, len(primeN)) if primeN[i] == True]
-
-result = []
-i = 0
-while n != 1 and i < len(primeNumber):
-    if n % primeNumber[i] == 0:
-        result.append(primeNumber[i])
-        n //= primeNumber[i]
-    else: i += 1
-
-for num in result:
-    print(num)
-'''
