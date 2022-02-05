@@ -1,63 +1,48 @@
+'''
+문제 - 최대 힙
+
+풀이 방법 - 재귀적으로 힙 특성을 재구축하는 함수를 구현하여 최대 힙 설계
+'''
 import sys
 
-heap = []
-size = -1
+class Heap:
+    def __init__(self):
+        self.__items = []
+        
+    def __percolate_up(self, i: int) -> None:
+        parent = (i - 1) // 2
+        if i > 0 and self.__items[i] > self.__items[parent]:
+            self.__items[i], self.__items[parent] = self.__items[parent], self.__items[i]
+            self.__percolate_up(parent)
     
-def isEmpty():
-    return size == -1
-def insertMaxHeap(key):
-    global heap
-    global size
-    size += 1
-    heap.append(key)
-    i = size
-
-    while i != 0:
-        if i % 2 == 0:
-            if key > heap[i // 2 - 1]:
-                heap[i] = heap[i // 2 - 1]
-                i = i // 2 - 1
-            else: break
-        else:
-            if key > heap[i // 2]:
-                heap[i] = heap[i // 2]
-                i //= 2
-            else: break
-    heap[i] = key
-def deleteMaxHeap():
-    if isEmpty():
-        return False
-    global heap
-    global size
-
-    removed = heap[0]
-    tempKey = heap[size]
-    size -= 1
-    parent = 0
-    child = 1
-
-    while child <= size:
-        if ((child < size) and (heap[child] < heap[child + 1])):
-            child += 1
-        if (tempKey >= heap[child]):
-            break
-        heap[parent] = heap[child]
-        parent = child
-        child = child * 2 + 1
-
-    heap[parent] = tempKey
-    return removed
-
+    def insert(self, item) -> None:
+        self.__items.append(item)
+        self.__percolate_up(len(self.__items) - 1)
+        
+    def __percolate_down(self, i: int) -> None:
+        child = i * 2 + 1
+        if child <= len(self.__items) - 1:
+            if child < len(self.__items) - 1 and self.__items[child] < self.__items[child + 1]:
+                child += 1
+            if self.__items[i] < self.__items[child]:
+                self.__items[i], self.__items[child] = self.__items[child], self.__items[i]
+                self.__percolate_down(child)
+        
+    def delete(self):
+        if self.is_empty():
+            return 0
+        removed = self.__items[0]
+        self.__items[0] = self.__items[len(self.__items) - 1]
+        self.__items.pop()
+        self.__percolate_down(0)
+        return removed
+    
+    def is_empty(self) -> bool:
+        return len(self.__items) == 0
+    
 n = int(sys.stdin.readline())
-
-result = []
-for i in range(0, n):
-    num = int(sys.stdin.readline())
-    if num == 0:
-        temp = deleteMaxHeap()
-        if temp == False:
-            print(0)
-        else:
-            print(temp)
-    else:
-        insertMaxHeap(num)
+heap = Heap()
+for _ in range(n):
+    x = int(sys.stdin.readline())
+    if x == 0: print(heap.delete())
+    else: heap.insert(x)
