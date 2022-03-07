@@ -55,7 +55,7 @@ class AVLTree:
         return _search(self.__root, key)
     
     def insert(self, key) -> None:
-        def _insert(node: TreeNode, key) -> None:
+        def _insert(node: TreeNode, key):
             if not node:
                 return TreeNode(key)
             if key == node.key:
@@ -68,7 +68,7 @@ class AVLTree:
         self.__root = _insert(self.__root, key)
     
     def delete(self, key) -> None:
-        def _delete(node: TreeNode, key) -> None:
+        def _delete(node: TreeNode, key):
             if not node:
                 return node
             if key < node.key:
