@@ -23,7 +23,10 @@ class OpenAddressing:
             if not self.__table[hash] or self.__table[hash] == OpenAddressing.DELETED:
                 self.__table[hash] = (key, value)
                 self.__size += 1
-                break
+                return
+            if self.__table[hash][0] == key:
+                self.__table[hash] = (key, value)
+                return
             
     def delete(self, key) -> None:
         for i in range(len(self.__table)):
@@ -33,7 +36,7 @@ class OpenAddressing:
             elif self.__table[hash] != OpenAddressing.DELETED and self.__table[hash][0] == key:
                 self.__table[hash] = OpenAddressing.DELETED
                 self.__size -= 1
-                break
+                return
     
     def is_full(self) -> bool:
         return self.__size == len(self.__table)
