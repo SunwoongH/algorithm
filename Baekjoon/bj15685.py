@@ -18,22 +18,29 @@ def make_dragon_curve():
     end_y = coordinates[-1][1]
     next_coordinates = []
     for i in range(len(coordinates) - 2, -1, -1):
-        board[coordinates[i][0] - end_x + end_y][end_y - coordinates[i][1] + end_x] = CHECK
-        next_coordinates.append((end_y - coordinates[i][1] + end_x, coordinates[i][0] - end_x + end_y))
+        dx = end_x - (coordinates[i][1] - end_y)
+        dy = end_y + (coordinates[i][0] - end_x)
+        board[dy][dx] = CHECK
+        next_coordinates.append((dx, dy))
     coordinates.extend(next_coordinates)
+
+def count_square():
+    square_count = 0
+    for r in range(SIZE - 1):
+        for c in range(SIZE - 1):
+            if board[r][c] and board[r + 1][c] and board[r][c + 1] and board[r + 1][c + 1]:
+                square_count += 1
+    return square_count
 
 n = int(input())
 board = [[EMPTY for _ in range(SIZE)] for _ in range(SIZE)]
 for _ in range(n):
     x, y, d, g = map(int, input().split())
-    coordinates = [(x, y), (x + init[d][0], y + init[d][1])]
-    board[y][x] = CHECK
-    board[y + init[d][1]][x + init[d][0]] = CHECK
+    tail = (x, y)
+    head = (x + init[d][0], y + init[d][1])
+    coordinates = [tail, head]
+    board[tail[1]][tail[0]] = CHECK
+    board[head[1]][head[0]] = CHECK
     for _ in range(g):
         make_dragon_curve()
-square_count = 0
-for r in range(SIZE - 1):
-    for c in range(SIZE - 1):
-        if board[r][c] and board[r + 1][c] and board[r][c + 1] and board[r + 1][c + 1]:
-            square_count += 1
-print(square_count)
+print(count_square())
