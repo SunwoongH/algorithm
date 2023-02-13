@@ -10,7 +10,6 @@ WALL = '#'
 move = [(1, 0), (-1, 0), (0, -1), (0, 1)]
 
 def bfs(start_r, start_c, end_r, end_c, k):
-    global before, after
     queue = deque([(start_r, start_c)])
     while queue:
         r, c = queue.popleft()
