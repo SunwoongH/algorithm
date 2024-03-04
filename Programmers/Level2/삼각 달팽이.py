@@ -1,37 +1,19 @@
 '''
-Created by sunwoong on 2023/06/21
-'''
-EMPTY = None
+Created by sunwoong on 2024/03/04
 
-def write_a_number(n, count, map, sequence):
-    is_finish = True
-    for i in range(count * 2, n - count):
-        if map[i][count] != EMPTY:
-            return sequence, False, is_finish
-        if is_finish:
-            is_finish = False
-        map[i][count] = sequence
-        sequence += 1
-    for i in range(count + 1, n - count * 2):
-        if map[n - count - 1][i] != EMPTY:
-            return sequence, False, is_finish
-        map[n - count - 1][i] = sequence
-        sequence += 1
-    for i in range(n - count - 2, count * 2, -1):
-        if map[i][i - count] != EMPTY:
-            return sequence, False, is_finish
-        map[i][i - count] = sequence
-        sequence += 1
-    return sequence, True, is_finish
+풀이 시간 - 60분
+'''
 
 def solution(n):
-    map = [[EMPTY for _ in range(n)] for _ in range(n)]
-    count = 0
-    result = True
-    sequence = 1
-    while result:
-        sequence, result, is_finish = write_a_number(n, count, map, sequence)
-        if result and is_finish:
-            break
-        count += 1
-    return [map[i][j] for i in range(n) for j in range(i + 1)]
+    board = [[0] * (i + 1) for i in range(n)]
+    move = [(1, 0), (0, 1), (-1, -1)]
+    number = 1
+    r, c = -1, 0
+    pos = 0
+    for i in range(n):
+        for _ in range(i, n):
+            r, c = r + move[pos][0], c + move[pos][1]
+            board[r][c] = number
+            number += 1
+        pos = (pos + 1) % len(move)
+    return [board[r][c] for r in range(n) for c in range(r + 1)]
