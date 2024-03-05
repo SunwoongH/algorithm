@@ -1,55 +1,39 @@
 '''
-Created by sunwoong on 2023/03/08
+Created by sunwoong on 2024/03/05
 
-풀이 시간 - 53분
+풀이 시간 - 37분
 '''
+move = [[(-1, 0), [(-1, 0), (0, -1), (0, 1)]],
+        [(0, 1), [(0, 1), (-1, 0), (1, 0)]],
+        [(1, 0), [(1, 0), (0, -1), (0, 1)]],
+        [(0, -1), [(0, -1), (-1, 0), (1, 0)]]]
 
-def check(r, c, place, size):
-    is_safety = True
-    buffer = [None for _ in range(size)]
-    move = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, 1), (1, -1)]
-    sides = [(0, 2), (0, 3), (1, 3), (1, 2)]
-    k = -1
-    side_pos = 0
-    for oper in move:
-        k += 1
-        dr = r + oper[0]
-        dc = c + oper[1]
-        if k < 4:
-            if 0 <= dr < size and 0 <= dc < size:
-                if place[dr][dc] == 'P':
-                    is_safety = False
-                    break
-                elif place[dr][dc] == 'O':
-                    ddr = dr + oper[0]
-                    ddc = dc + oper[1]
-                    if 0 <= ddr < size and 0 <= ddc < size and place[ddr][ddc] == 'P':
-                        is_safety = False
-                        break
-                buffer[k] = place[dr][dc]
-            continue
-        if 0 <= dr < size and 0 <= dc < size and place[dr][dc] == 'P':
-            for side in sides[side_pos]:
-                if buffer[side] == 'O' or buffer[side] == 'P':
-                    is_safety = False
-                    break
-            if not is_safety:
-                break
-        side_pos += 1
-    return is_safety
-                
 def solution(places):
     answer = []
-    SIZE = 5
     for place in places:
-        is_safety = True
-        for r in range(SIZE):
-            for c in range(SIZE):
+        is_correct = 1
+        p_pos = []
+        for r in range(len(place)):
+            for c in range(len(place[0])):
                 if place[r][c] == 'P':
-                    if not check(r, c, place, SIZE):
-                        is_safety = False
+                    p_pos.append((r, c))
+        for r, c in p_pos:
+            for oper in move:
+                dr = r + oper[0][0]
+                dc = c + oper[0][1]
+                if 0 <= dr < len(place) and 0 <= dc < len(place[0]):
+                    if place[dr][dc] == 'O':
+                        for next_oper in oper[1]:
+                            ddr = dr + next_oper[0]
+                            ddc = dc + next_oper[1]
+                            if 0 <= ddr < len(place) and 0 <= ddc < len(place[0]) and place[ddr][ddc] == 'P':
+                                is_correct = 0
+                                break
+                    elif place[dr][dc] == 'P':
+                        is_correct = 0
+                    if not is_correct:
                         break
-            if not is_safety:
+            if not is_correct:
                 break
-        answer.append(1 if is_safety else 0)
+        answer.append(is_correct)
     return answer
