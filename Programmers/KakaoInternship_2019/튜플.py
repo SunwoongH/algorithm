@@ -1,30 +1,32 @@
 '''
-Created by sunwoong on 2023/03/25
+Created by sunwoong on 2024/03/08
 
-풀이 시간 - 25분
+풀이 시간 - 21분
 '''
+from collections import defaultdict
 
 def solution(s):
+    datas = []
     temp = None
-    num = ""
-    sets = []
-    for i in range(1, len(s) - 1):
-        if s[i] == '{':
-            temp = set()
-        elif s[i] == '}':
-            temp.add(int(num))
-            num = ""
-            sets.append(temp)
-            temp = None
-        else:
-            if s[i].isdigit():
-                num += s[i]
-            else:
-                if temp is not None:
-                    temp.add(int(num))
-                    num = ""
-    sets.sort(key=lambda x: len(x))
-    answer = [list(sets[0])[0]]
-    for i in range(1, len(sets)):
-        answer.append(list(sets[i].difference(sets[i - 1]))[0])
-    return answer
+    number = None
+    is_start = False
+    for char in s[1:len(s) - 1]:
+        if char == '{':
+            temp = []
+            number = []
+            is_start = True
+        if is_start:
+            if char.isdigit():
+                number.append(char)
+            elif char == ",":
+                temp.append(int(''.join(number)))
+                number = []
+            elif char == '}':
+                temp.append(int(''.join(number)))
+                datas.append(temp)
+                is_start = False
+    table = defaultdict(int)
+    for data in datas:
+        for key in data:
+            table[key] += 1
+    return list(map(lambda x: x[0], sorted(table.items(), key=lambda x: -x[1])))
