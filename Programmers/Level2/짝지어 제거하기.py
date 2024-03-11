@@ -1,15 +1,14 @@
 '''
-Created by sunwoong on 2023/06/04
-'''
-from collections import deque
+Created by sunwoong on 2024/03/11
 
+풀이 시간 - 30분
+'''
 def solution(s):
-    left = deque()
-    right = deque(s)
-    while right:
-        while left and right and left[-1] == right[0]:
-            left.pop()
-            right.popleft()
-        if right:
-            left.append(right.popleft())
-    return 1 if not left and not right else 0
+    stack = []
+    for char in s:
+        if stack:
+            if stack[-1] == char:
+                stack.pop()
+                continue
+        stack.append(char)
+    return 1 if not stack else 0
