@@ -34,3 +34,22 @@ def solution(s):
             word.extend(s[ed - i:])
         length_table[i] = len(''.join(word))
     return min(length_table.values())
+
+def solution(s):
+    answer = len(s)
+    for i in range(1, len(s) // 2 + 1):
+        prev = None
+        length = 0
+        count = 1
+        for st in range(0, len(s), i):
+            temp = s[st:st + i]
+            if prev == temp:
+                count += 1
+            else:
+                if count > 1:
+                    length += len(str(count))
+                    count = 1
+                length += len(temp)
+                prev = temp
+        answer = min(answer, length)
+    return answer
