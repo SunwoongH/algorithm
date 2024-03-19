@@ -1,16 +1,11 @@
 '''
-Created by sunwoong on 2022/12/02
+Created by sunwoong on 2024/03/19
 '''
 
 def solution(triangle):
-    dp = [[0 for _ in range(len(triangle[-1]))] for _ in range(len(triangle))]
-    dp[0][0] = triangle[0][0]
-    for r in range(1, len(triangle)):
-        for c in range(len(triangle[r])):
-            if c == 0:
-                dp[r][c] = dp[r - 1][c] + triangle[r][c]
-            elif c == len(triangle[r]) - 1:
-                dp[r][c] = dp[r - 1][c - 1] + triangle[r][c]
-            else:
-                dp[r][c] = max(dp[r - 1][c - 1], dp[r - 1][c]) + triangle[r][c]
-    return max(dp[len(triangle) - 1])
+    length = len(triangle[-1])
+    dp = [[0 for _ in range(length + 2)] for _ in range(length + 1)]
+    for r in range(1, length + 1):
+        for c in range(1, r + 1):
+            dp[r][c] = max(dp[r - 1][c], dp[r - 1][c - 1]) + triangle[r - 1][c - 1]
+    return max(dp[-1])
