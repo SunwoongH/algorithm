@@ -1,5 +1,7 @@
 '''
-Created by sunwoong on 2022/12/13
+Created by sunwoong on 2024/03/21
+
+풀이 시간 - 20분
 '''
 from itertools import product
 
@@ -13,3 +15,27 @@ def solution(word):
     for i in range(len(words)):
         if words[i] == word:
             return i + 1
+
+alpha = ['A', 'E', 'I', 'O', 'U']
+
+def dfs(word, target):
+    if word == target:
+        return 1, True
+    count = 1
+    found = False
+    for char in alpha:
+        word.append(char)
+        if len(word) > 5:
+            word.pop()
+            continue
+        prev_count, prev_found = dfs(word, target)
+        count += prev_count
+        word.pop()
+        if prev_found:
+            found = True
+        if found:
+            return count, found
+    return count, found
+
+def solution(word):
+    return dfs([], list(word))[0] - 1
