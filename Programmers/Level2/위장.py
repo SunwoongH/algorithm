@@ -1,5 +1,7 @@
 '''
-Created by sunwoong on 2022/12/26
+Created by sunwoong on 2024/04/30
+
+풀이 시간 - 5분
 '''
 from collections import defaultdict
 
@@ -8,6 +10,6 @@ def solution(clothes):
     for _, kind in clothes:
         table[kind] += 1
     answer = 1
-    for count in table.values():
-        answer *= count + 1
+    for kind in table.keys():
+        answer *= table[kind] + 1
     return answer - 1
