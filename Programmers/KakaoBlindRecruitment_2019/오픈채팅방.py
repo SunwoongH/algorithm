@@ -1,21 +1,19 @@
 '''
-Created by sunwoong on 2024/02/19
+Created by sunwoong on 2024/04/30
 
-풀이 시간 - 20분
+풀이 시간 - 10분
 '''
 
 def solution(record):
-    sentence = ("님이 들어왔습니다.", "님이 나갔습니다.")
-    nickname = dict()
     answer = []
+    user = dict()
     for data in record:
-        temp = data.split()
-        if len(temp) == 2:
-            answer.append([temp[1], sentence[1]])
-            continue
-        if temp[0] == 'Enter':
-            nickname[temp[1]] = temp[2]
-            answer.append([temp[1], sentence[0]])
-        elif temp[0] == 'Change':
-            nickname[temp[1]] = temp[2]
-    return [nickname[answer[i][0]] + answer[i][1] for i in range(len(answer))]
+        data = data.split()
+        if data[0] == 'Enter':
+            answer.append([data[1], "님이 들어왔습니다."])
+            user[data[1]] = data[2]
+        elif data[0] == 'Leave':
+            answer.append([data[1], "님이 나갔습니다."])
+        else:
+            user[data[1]] = data[2]
+    return [''.join([user[data[0]], data[1]]) for data in answer]
