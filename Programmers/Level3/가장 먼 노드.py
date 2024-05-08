@@ -1,30 +1,30 @@
 '''
-Created by sunwoong on 2022/12/09
+Created by sunwoong on 2024/05/08
+
+풀이 시간 - 20분
 '''
 from collections import defaultdict, deque
 
-def bfs(n, start, graph):
-    queue = deque([(start, 0)])
+def calculate_minimum_distance(n, start, graph):
+    minimum_distance = []
     visited = [False for _ in range(n + 1)]
     visited[start] = True
-    result = 0
-    shortest_path = -1
+    queue = deque([(start, 0)])
     while queue:
-        curr, edge_count = queue.popleft()
-        if edge_count > shortest_path:
-            result = 1
-            shortest_path = edge_count
-        elif edge_count == shortest_path:
-            result += 1
-        for next in graph[curr]:
-            if not visited[next]:
-                visited[next] = True
-                queue.append((next, edge_count + 1))
-    return result
+        node, distance = queue.popleft()
+        minimum_distance.append(distance)
+        for next_node in graph[node]:
+            if not visited[next_node]:
+                visited[next_node] = True
+                queue.append((next_node, distance + 1))
+    return minimum_distance
 
 def solution(n, edge):
     graph = defaultdict(list)
     for u, v in edge:
         graph[u].append(v)
         graph[v].append(u)
-    return bfs(n, 1, graph)
+    distance = calculate_minimum_distance(n, 1, graph)
+    distance.sort(reverse=True)
+    target = distance[0]
+    return distance.count(target)
