@@ -50,3 +50,43 @@ def solution(nodeinfo):
     preorder(root, preorders)
     postorder(root, postorders)
     return [preorders, postorders]
+
+def preorder(y, x, answer):
+    if not y:
+        return
+    node = y[0]
+    idx = x.index(node)
+    left, right = [], []
+    for i in range(1, len(y)):
+        if node[0] > y[i][0]:
+            left.append(y[i])
+        else:
+            right.append(y[i])
+    answer.append(node[2])
+    preorder(left, x[:idx], answer)
+    preorder(right, x[idx + 1:], answer)
+    
+def postorder(y, x, answer):
+    if not y:
+        return
+    node = y[0]
+    idx = x.index(node)
+    left, right = [], []
+    for i in range(1, len(y)):
+        if node[0] > y[i][0]:
+            left.append(y[i])
+        else:
+            right.append(y[i])
+    postorder(left, x[:idx], answer)
+    postorder(right, x[idx + 1:], answer)
+    answer.append(node[2])
+
+def solution(nodeinfo):
+    nodeinfo = [[*info, idx + 1] for idx, info in enumerate(nodeinfo)]
+    y = sorted(nodeinfo, key=lambda x: -x[1])
+    x = sorted(nodeinfo)
+    preorders = []
+    postorders = []
+    preorder(y, x, preorders)
+    postorder(y, x, postorders)
+    return [preorders, postorders]
