@@ -1,31 +1,30 @@
 '''
-Created by sunwoong on 2022/10/10
+Created by sunwoong on 2024/05/14
+
+풀이 시간 - 60분
 '''
 import heapq
 
 def solution(jobs):
-    time = 0
-    scheduler = []
-    count = len(jobs)
-    for point, task in jobs:
-        heapq.heappush(scheduler, (task, point))
-    wait = 0
-    while scheduler:
-        is_dispatch = False
-        temp = []
-        while not is_dispatch and scheduler:
-            task, point = heapq.heappop(scheduler)
-            if point <= time:
-                time += task
-                wait += time - point
-                is_dispatch = True
-            else:
-                temp.append((task, point))
-        if not is_dispatch:
-            temp.sort(key=lambda x: (-x[1], -x[0]))
-            task, point = temp.pop()
-            time += point - time + task
-            wait += time - point
-        for job in temp:
-            heapq.heappush(scheduler, job)
-    return wait // count
+    jobs.sort(key=lambda x: -x[0])
+    size = len(jobs)
+    waiting_time = 0
+    waiting = []
+    start = 0
+    while True:
+        while jobs and jobs[-1][0] <= start:
+            job = jobs.pop()
+            heapq.heappush(waiting, (job[1], job[0]))
+        if not waiting:
+            if not jobs:
+                break
+            job = jobs.pop()
+            heapq.heappush(waiting, (job[1], job[0]))
+        time, origin = heapq.heappop(waiting)
+        if origin > start:
+            start = origin
+            waiting_time += time
+        else:
+            waiting_time += time + start - origin
+        start += time
+    return int(waiting_time / size)
