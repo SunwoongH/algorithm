@@ -1,35 +1,30 @@
 '''
-Created by sunwoong on 2022/12/15
+Created by sunwoong on 2024/05/22
+
+풀이 시간 - 20분
 '''
-from collections import deque
+def find(parent, n):
+    if parent[n] != n:
+        parent[n] = find(parent, parent[n])
+    return parent[n]
 
-parents = None
-
-def find(a):
-    while parents[a] != -1:
-        a = parents[a]
-    return a
-
-def union(a, b):
-    if a > b:
-        parents[a] = b
+def union(parent, u, v):
+    parent_u = find(parent, u)
+    parent_v = find(parent, v)
+    if parent_u < parent_v:
+        parent[parent_v] = parent_u
     else:
-        parents[b] = a
-        
-def kruskal(n, edges):
-    edge_count = 0
-    total_cost = 0
-    while edge_count < n - 1:
-        a, b, cost = edges.popleft()
-        parent_a = find(a)
-        parent_b = find(b)
-        if parent_a != parent_b:
-            union(parent_a, parent_b)
-            edge_count += 1
-            total_cost += cost
-    return total_cost
+        parent[parent_u] = parent_v
 
 def solution(n, costs):
-    global parents
-    parents = [-1 for _ in range(n)]
-    return kruskal(n, deque(sorted(costs, key=lambda x: x[2])))
+    costs.sort(key=lambda x: -x[2])
+    parent = [i for i in range(n)]
+    edge_count = 0
+    answer = 0
+    while edge_count < n - 1:
+        u, v, cost = costs.pop()
+        if find(parent, u) != find(parent, v):
+            union(parent, u, v)
+            edge_count += 1
+            answer += cost
+    return answer
