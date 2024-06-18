@@ -1,27 +1,30 @@
 '''
-Created by sunwoong on 2022/09/30
-'''
-import collections
+Created by sunwoong on 2024/06/18
 
-def bfs(begin, target, words, length):
-    queue = collections.deque([(begin, 0)])
+풀이 시간 - 20분
+'''
+from collections import deque
+
+def bfs(begin, target, words):
+    visited = [False for _ in range(len(words))]
+    queue = deque([(begin, 0)])
     while queue:
-        word, count = queue.popleft()
-        if word == target:
-            return count
-        for i in range(len(word)):
-            for char in length[i]:
-                if char != word[i]:
-                    new_word = word[:i] + char + word[i + 1:]
-                    if new_word in words:
-                        queue.append((new_word, count + 1))
+        curr, convert = queue.popleft()
+        if curr == target:
+            return convert
+        for i in range(len(words)):
+            count = 0
+            if visited[i]:
+                continue
+            for j in range(len(words[i])):
+                if curr[j] != words[i][j]:
+                    count += 1
+            if count == 1:
+                visited[i] = True
+                queue.append((words[i], convert + 1))
     return 0
-    
+
 def solution(begin, target, words):
     if target not in words:
         return 0
-    length = collections.defaultdict(set)
-    for word in words:
-        for i in range(len(word)):
-            length[i].add(word[i])
-    return bfs(begin, target, set(words), length)
+    return bfs(begin, target, words)
