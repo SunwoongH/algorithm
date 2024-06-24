@@ -1,15 +1,18 @@
 '''
-Created by sunwoong on 2022/12/14
+Created by sunwoong on 2024/06/24
+
+풀이 시간 - 40분
 '''
 
 def solution(people, limit):
-    count = 0
-    left, right = 0, len(people) - 1
-    people.sort(reverse=True)
+    left = 0
+    right = len(people) - 1
+    people.sort()
+    answer = 0
     while left <= right:
-        boat = people[left]
-        if left < right and boat + people[right] <= limit:
-            right -= 1
-        left += 1
-        count += 1
-    return count
+        answer += 1
+        weight = people[left] + people[right]
+        if weight <= limit:
+            left += 1
+        right -= 1
+    return answer
