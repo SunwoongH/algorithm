@@ -44,3 +44,30 @@ def solution(n, info):
         break
     promising.sort(key=lambda x: ''.join(map(str, x[::-1])), reverse=True)
     return promising[0]
+
+from itertools import combinations_with_replacement
+
+def calculate(a, l):
+    a_score = 0
+    l_score = 0
+    for i in range(len(a)):
+        if a[i] < l[i]:
+            l_score += 10 - i
+        elif a[i]:
+            a_score += 10 - i
+    return l_score - a_score
+
+def solution(n, info):
+    promising = [-1]
+    maximum_score = 0
+    for case in combinations_with_replacement(range(11), n):
+        lian = [0 for _ in range(11)]
+        for num in case:
+            lian[10 - num] += 1
+        score = calculate(info, lian)
+        if score <= 0:
+            continue
+        if maximum_score < score:
+            promising = lian
+            maximum_score = score
+    return promising
