@@ -1,39 +1,25 @@
 '''
-Created by sunwoong on 2022/11/21 (답은 잘 나오는데 시간 초과.......)
+Created by sunwoong on 2025/03/06
 '''
 import sys
 from itertools import permutations
-sys.setrecursionlimit(10 ** 8)
 
-def dfs(depth, total):
-    if total == 0:
-        global attack_count
-        attack_count = min(attack_count, depth)
-        return
-    elif total < 0:
-        return
-    for order in permutations(range(n), n):
-        valid = dict()
-        i = 0
-        for pos in order:
-            if lifes[i] - attacks[pos] >= 0:
-                lifes[i] -= attacks[pos]
-            else:
-                valid[pos] = lifes[i]
-                lifes[i] = 0
-            i += 1
-        dfs(depth + 1, sum(lifes))
-        i = 0
-        for pos in order:
-            if pos in valid:
-                lifes[i] += valid[pos]
-            else:
-                lifes[i] += attacks[pos]
-            i += 1
-
-attacks = (9, 3, 1)
 n = int(sys.stdin.readline())
-lifes = list(map(int, sys.stdin.readline().split()))
-attack_count = sys.maxsize
-dfs(0, sum(lifes))
-print(attack_count)
+scv = list(map(int, sys.stdin.readline().split()))
+scv.extend([0, 0])
+
+dp = [[[0 for _ in range(61)] for _ in range(61)] for _ in range(61)]
+dp[scv[0]][scv[1]][scv[2]] = 1
+
+for i in range(60, -1, -1):
+    for j in range(60, -1, -1):
+        for k in range(60, -1, -1):
+            if dp[i][j][k] > 0:
+                for case in permutations([9, 3, 1], 3):
+                    di = i - case[0] if i - case[0] >= 0 else 0
+                    dj = j - case[1] if j - case[1] >= 0 else 0
+                    dk = k - case[2] if k - case[2] >= 0 else 0
+                    if dp[di][dj][dk] == 0 or dp[di][dj][dk] > dp[i][j][k] + 1:
+                        dp[di][dj][dk] = dp[i][j][k] + 1
+
+print(dp[0][0][0] - 1)
