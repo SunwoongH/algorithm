@@ -1,33 +1,28 @@
 '''
-Created by sunwoong on 2022/12/17 (시간 초과......)
+Created by sunwoong on 2025/03/11
 '''
 import sys
-from itertools import permutations
 from collections import defaultdict
-input = sys.stdin.readline
 
-n = int(input())
+n = int(sys.stdin.readline())
 words = []
-seen = set()
+weights = defaultdict(int)
 for _ in range(n):
-    word = list(input().rstrip())
+    word = sys.stdin.readline().rstrip()
     words.append(word)
-    seen = seen.union(set(word))
-seen = list(seen)
-max_total = 0
-for items in permutations(range(10), len(seen)):
-    table = defaultdict(int)
-    for i in range(len(seen)):
-        table[seen[i]] = items[i]
-    total = 0
-    for word in words:
-        number = ""
-        for char in word:
-            number += str(table[char])
-        if number[0] == '0':
-            if len(number) > 1:
-                total += int(number[1:])
-        else:
-            total += int(number)
-    max_total = max(max_total, total)
-print(max_total)
+    for i in range(len(word)):
+        weight = 10 ** (len(word) - i)
+        weights[word[i]] += weight
+mapping = defaultdict(int)
+sorted_weights = sorted(weights.items(), key=lambda x: -x[1])
+sequence = 9
+for item in sorted_weights:
+    mapping[item[0]] = sequence
+    sequence -= 1
+answer = 0
+for word in words:
+    value = ""
+    for c in word:
+        value += str(mapping[c])
+    answer += int(value)
+print(answer)
