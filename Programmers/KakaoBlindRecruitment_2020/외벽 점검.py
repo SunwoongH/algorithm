@@ -1,5 +1,5 @@
 '''
-Created by sunwoong on 2024/10/09
+Created by sunwoong on 2025/06/24
 '''
 from itertools import permutations
 
@@ -36,3 +36,31 @@ def solution(n, weak, dist):
                     return i
 
     return -1
+
+from itertools import permutations
+
+def solution(n, weak, dist):
+    answer = int(1e9)
+    
+    new_weak = weak[:]
+    for i in range(len(weak) - 1):
+        new_weak.append(n + weak[i])
+    
+    for case in permutations(dist, len(dist)):
+        for i in range(len(weak)):
+            start = i - 1
+            for k in range(len(dist)):
+                end = new_weak[start + 1] + case[k]
+                while start + 1 < i + len(weak):
+                    if new_weak[start + 1] <= end:
+                        start += 1
+                    else:
+                        break
+                if start == i + len(weak) - 1:
+                    answer = min(answer, k + 1)
+                    break
+                    
+    if answer == int(1e9):
+        return -1
+    
+    return answer
