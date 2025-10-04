@@ -1,22 +1,18 @@
 '''
-Created by sunwoong on 2023/02/12
+Created by sunwoong on 2025/10/04
 '''
 import sys
-input = sys.stdin.readline
+from bisect import bisect_left
 
-n = int(input())
-sequence = list(map(int, input().split()))
-temp = []
+n = int(sys.stdin.readline())
+sequence = list(map(int, sys.stdin.readline().split()))
+answer = []
+
 for num in sequence:
-    if not temp or temp[-1] < num:
-        temp.append(num)
+    if not answer or answer[-1] < num:
+        answer.append(num)
         continue
-    left, right = 0, len(temp)
-    while left < right:
-        mid = (left + right) // 2
-        if temp[mid] < num:
-            left = mid + 1
-        else:
-            right = mid
-    temp[left] = num
-print(len(temp))
+    pos = bisect_left(answer, num)
+    answer[pos] = num
+
+print(len(answer))
